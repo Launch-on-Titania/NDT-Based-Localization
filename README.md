@@ -50,22 +50,3 @@ roslaunch ndt_localizer ndt_localizer.launch
 roslaunch ndt_localizer sc_ndt_localizer.launch
 ```
 
-~~然后先加载地图到点云显示，等点云显示后 进行下一步：~~
- 
- ~~用2d pose estimate 将箭头设置成如图样子~~
-
-~~![](cfgs/initial_pose.png)~~
-
-
-~~这一步操作实现把初始估计姿态加入到 topic `/initialpose`里面~~
-
-~~(现在不需要设置初始位姿了)~~
-
-
-
-~~play the rosbag:~~
-
-~~```bash
-rosbag play mapping_localization.bag~~ ~~--clock~~
-~~```~~
-~~（bag 的播放步骤也被加入到了launch中）~~
