@@ -45,7 +45,7 @@ rosparam set use_sim_time true
 ```
 roslaunch ndt_localizer ndt_localizer.launch
 ```
-如果同时跑`scan context` 和 `ndt_localizer`则运行：(这一部分暂时还没搞完)
+如果同时跑`scan context` 和 `ndt_localizer`则运行：
 ```
 roslaunch ndt_localizer sc_ndt_localizer.launch
 ```

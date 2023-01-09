@@ -4,8 +4,22 @@
 #include <tf/transform_listener.h>
 #include <tf/transform_datatypes.h>
 #include <iostream>
+#include <fstream>
 
 int main(int argc, char** argv){
+
+ std::ofstream outfile;
+  outfile.open("/home/yyxunn/school/smartV/project/track.txt",std::ios::out);
+  if (!outfile.is_open())
+  {
+    std::cout<<std::endl<<"!is_open"<<std::endl;
+  }
+  else
+  {
+    std::cout<<std::endl<<"is open"<<std::endl;
+  }
+
+
   ros::init(argc, argv, "odom_pub");
 
   ros::NodeHandle n;
@@ -45,6 +59,8 @@ int main(int argc, char** argv){
     odom.pose.pose.position.z = transform.getOrigin().z();
     tf::quaternionTFToMsg(transform.getRotation(), odom.pose.pose.orientation) ;
 
+    outfile<<transform.getOrigin().x()<<", "<<transform.getOrigin().y()<<std::endl;
+
     //set the velocity
     odom.child_frame_id = "base_link";
     odom.twist.twist.linear.x = 0;
@@ -57,4 +73,8 @@ int main(int argc, char** argv){
     
     r.sleep();
   }
+
+  outfile.close();
+  std::cout<<"done."<<std::endl;
+  return 0;
 }
