@@ -15,9 +15,13 @@
   <arg name="output_pose_topic" default="ndt_pose" doc="Estimated self position" />
   <arg name="output_pose_with_covariance_topic" default="ndt_pose_with_covariance" doc="Estimated self position with covariance" />
   <arg name="output_diagnostics_topic" default="diagnostics" doc="Diagnostic topic" />
+  <arg name="pcd_filepath" default="$(find ndt_localizer)/map/map_v1.pcd" />
 
   <include file="$(find ndt_localizer)/launch/static_tf.launch" />
-  <include file="$(find ndt_localizer)/launch/map_loader.launch" />
+  <include file="$(find ndt_localizer)/launch/map_loader.launch">
+    <arg name="map_topic" value="$(arg input_map_points_topic)" />
+    <arg name="pcd_path" value="$(arg pcd_filepath)" />
+  <include/>
   <include file="$(find ndt_localizer)/launch/points_downsample.launch" />
 
   <!-- tf -->
