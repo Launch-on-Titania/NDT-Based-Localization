@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(ndt_localizer)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(catkin REQUIRED COMPONENTS
         roscpp
@@ -24,6 +24,8 @@ generate_messages(
 )
 
 find_package(PCL REQUIRED QUIET)
+find_package(GTSAM REQUIRED QUIET)
+find_package(OpenCV REQUIRED QUIET)
 
 catkin_package(
         INCLUDE_DIRS include
@@ -41,7 +43,12 @@ catkin_package(
         message_generation
 )
 
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(include 
+        ${catkin_INCLUDE_DIRS}
+        ${GTSAM_INCLUDE_DIR}
+        ${PCL_INCLUDE_DIRS}
+        ${OpenCV_INCLUDE_DIRS}
+)
 
 ###########
 ## Build ##
@@ -50,6 +57,19 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 include_directories(include ${catkin_INCLUDE_DIRS})
 SET(CMAKE_CXX_FLAGS "-O2 -g -Wall ${CMAKE_CXX_FLAGS}")
 
+add_executable(scanOptimal 
+        nodes/poseOptimal.cpp
+        nodes/Scancontext.cpp
+      )
+target_link_libraries(scanOptimal
+  ${catkin_LIBRARIES} ${PCL_LIBRARIES} 
+  gtsam
+)
+add_executable(odom_pub
+        nodes/odometry_publisher.cpp
+      )
+
+target_link_libraries(odom_pub ${catkin_LIBRARIES})
 add_executable(voxel_grid_filter nodes/points_downsampler.cpp)
 
 add_dependencies(voxel_grid_filter ${catkin_EXPORTED_TARGETS})

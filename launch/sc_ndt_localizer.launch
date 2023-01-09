@@ -51,5 +51,19 @@
 	<node pkg="rosbag" type="play" name="rosbag"
 		args="'$(arg bag_filepath)' --delay '$(arg play_delay)' --rate '$(arg play_rate)' --clock" />
 	
+    <node pkg="ndt_localizer" type="odom_pub" name="odom_pub" output="screen"/>
+
+  <node pkg="ndt_localizer" type="scanOptimal" name="scanOptimal" output="screen">
+	 <remap from="/velodyne_cloud_registered_local" to="/filtered_points"/>
+	 <remap from="/aft_mapped_to_init" to="/odom"/>
+	 <param name="sc_dist_thres" type="double" value="0.005"/>
+	  <!-- <remap from="/aft_pgo_odom" to=""/>
+	 <remap from="/repub_odom"" to=""/>
+	 <remap from="/aft_pgo_map" to=""/>
+	 <remap from="/loop_scan_local" to=""/>
+	 <remap from="/loop_submap_local" to=""/> 
+	 <remap from="/loop_submap_local" to=""/> -->
+	
+  </node>
 
 </launch>

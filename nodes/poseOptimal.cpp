@@ -379,7 +379,7 @@ void pubPath(void)
   // pub odom and path
   nav_msgs::Odometry odomAftPGO;
   nav_msgs::Path pathAftPGO;
-  pathAftPGO.header.frame_id = "/odom_source";
+  pathAftPGO.header.frame_id = "/base_link";
   mKF.lock();
   // for (int node_idx=0; node_idx < int(keyframePosesUpdated.size()) - 1; node_idx++) // -1 is just delayed
   // visualization (because sometimes mutexed while adding(push_back) a new one)
@@ -390,7 +390,7 @@ void pubPath(void)
     // const gtsam::Pose3& pose_est = isamCurrentEstimate.at<gtsam::Pose3>(node_idx);
 
     nav_msgs::Odometry odomAftPGOthis;
-    odomAftPGOthis.header.frame_id = "/odom_source";
+    odomAftPGOthis.header.frame_id = "/base_link";
     odomAftPGOthis.child_frame_id = "/aft_pgo";
     odomAftPGOthis.header.stamp = ros::Time().fromSec(keyframeTimes.at(node_idx));
     odomAftPGOthis.pose.pose.position.x = pose_est.x;
@@ -405,7 +405,7 @@ void pubPath(void)
     poseStampAftPGO.pose = odomAftPGOthis.pose.pose;
 
     pathAftPGO.header.stamp = odomAftPGOthis.header.stamp;
-    pathAftPGO.header.frame_id = "/odom_source";
+    pathAftPGO.header.frame_id = "/base_link";
     pathAftPGO.poses.push_back(poseStampAftPGO);
   }
   mKF.unlock();
@@ -422,7 +422,7 @@ void pubPath(void)
   q.setY(odomAftPGO.pose.pose.orientation.y);
   q.setZ(odomAftPGO.pose.pose.orientation.z);
   transform.setRotation(q);
-  br.sendTransform(tf::StampedTransform(transform, odomAftPGO.header.stamp, "/odom_source", "/aft_pgo"));
+  br.sendTransform(tf::StampedTransform(transform, odomAftPGO.header.stamp, "/base_link", "/aft_pgo"));
 }  // pubPath
 
 void updatePoses(void)
@@ -532,12 +532,12 @@ boost::optional<gtsam::Pose3> doICPVirtualRelative(int _loop_kf_idx, int _curr_k
   // loop verification
   sensor_msgs::PointCloud2 cureKeyframeCloudMsg;
   pcl::toROSMsg(*cureKeyframeCloud, cureKeyframeCloudMsg);
-  cureKeyframeCloudMsg.header.frame_id = "/odom_source";
+  cureKeyframeCloudMsg.header.frame_id = "/base_link";
   pubLoopScanLocal.publish(cureKeyframeCloudMsg);
 
   sensor_msgs::PointCloud2 targetKeyframeCloudMsg;
   pcl::toROSMsg(*targetKeyframeCloud, targetKeyframeCloudMsg);
-  targetKeyframeCloudMsg.header.frame_id = "/odom_source";
+  targetKeyframeCloudMsg.header.frame_id = "/base_link";
   pubLoopSubmapLocal.publish(targetKeyframeCloudMsg);
 
   // ICP Settings
@@ -893,7 +893,7 @@ void pubMap(void)
 
   sensor_msgs::PointCloud2 laserCloudMapPGOMsg;
   pcl::toROSMsg(*laserCloudMapPGO, laserCloudMapPGOMsg);
-  laserCloudMapPGOMsg.header.frame_id = "/odom_source";//**
+  laserCloudMapPGOMsg.header.frame_id = "/base_link";//**
   pubMapAftPGO.publish(laserCloudMapPGOMsg);
 }
 
