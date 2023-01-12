@@ -9,15 +9,17 @@
 int main(int argc, char** argv){
 
  std::ofstream outfile;
-  outfile.open("/home/yyxunn/school/smartV/project/track.txt",std::ios::out);
-  if (!outfile.is_open())
-  {
-    std::cout<<std::endl<<"!is_open"<<std::endl;
-  }
-  else
-  {
-    std::cout<<std::endl<<"is open"<<std::endl;
-  }
+  outfile.open("track.txt",std::ios::out);
+  std::ofstream utm_outfile;
+  utm_outfile.open("/home/yyxunn/school/smartV/project/team1_track_tum.txt", std::ios::out);
+  // if (!outfile.is_open())
+  // {
+  //   std::cout<<std::endl<<"!is_open"<<std::endl;
+  // }
+  // else
+  // {
+  //   std::cout<<std::endl<<"is open"<<std::endl;
+  // }
 
 
   ros::init(argc, argv, "odom_pub");
@@ -43,7 +45,9 @@ int main(int argc, char** argv){
     }
 
     
-    
+    utm_outfile<<transform.stamp_<<" "<<transform.getOrigin().x()<<" "<<transform.getOrigin().y()<<" "
+    <<transform.getOrigin().z()<<" "<<transform.getRotation().x()<<" "<<transform.getRotation().y()<<" "
+    <<transform.getRotation().z()<<" "<<transform.getRotation().w()<<std::endl;
 
    
 
@@ -51,6 +55,8 @@ int main(int argc, char** argv){
     nav_msgs::Odometry odom;
     odom.header.stamp = transform.stamp_;
     odom.header.frame_id = "map";
+
+  
 
     //set the position
     
@@ -75,6 +81,7 @@ int main(int argc, char** argv){
   }
 
   outfile.close();
+  utm_outfile.close();
   std::cout<<"done."<<std::endl;
   return 0;
 }

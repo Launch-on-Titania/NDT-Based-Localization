@@ -94,6 +94,9 @@ int main(int argc, char** argv)
 
     MapLoader map_loader(nh);
 
+ 
+
+
     ros::spin();
 
     return 0;

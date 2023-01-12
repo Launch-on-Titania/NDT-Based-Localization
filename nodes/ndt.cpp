@@ -12,6 +12,7 @@ NdtLocalizer::NdtLocalizer(ros::NodeHandle &nh, ros::NodeHandle &private_nh):nh_
   transform_probability_pub_ = nh_.advertise<std_msgs::Float32>("transform_probability", 10);
   iteration_num_pub_ = nh_.advertise<std_msgs::Float32>("iteration_num", 10);
   diagnostics_pub_ = nh_.advertise<diagnostic_msgs::DiagnosticArray>("diagnostics", 10);
+  fps_pub_ = nh_.advertise<std_msgs::Float32>("fps_time", 10);
 
   // Subscribers
   initial_pose_sub_ = nh_.subscribe("initialpose", 100, &NdtLocalizer::callback_init_pose, this);
@@ -182,7 +183,7 @@ void NdtLocalizer::callback_pointcloud(
 
   const auto exe_end_time = std::chrono::system_clock::now();
   const double exe_time = std::chrono::duration_cast<std::chrono::microseconds>(exe_end_time - exe_start_time).count() / 1000.0;
-
+  const double fpt_time = 1.0/exe_time * 1000;// exe time is ms so we should times 1000 to output hz.
   const float transform_probability = ndt_.getTransformationProbability();
   const int iteration_num = ndt_.getFinalNumIteration();
 
@@ -238,6 +239,10 @@ void NdtLocalizer::callback_pointcloud(
   std_msgs::Float32 exe_time_msg;
   exe_time_msg.data = exe_time;
   exe_time_pub_.publish(exe_time_msg);
+
+  std_msgs::Float32 fpt_msg;
+  fpt_msg.data = fpt_time;
+  fps_pub_.publish(fpt_msg);
 
   std_msgs::Float32 transform_probability_msg;
   transform_probability_msg.data = transform_probability;

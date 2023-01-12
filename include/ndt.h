@@ -47,6 +47,7 @@ private:
     ros::Publisher transform_probability_pub_;
     ros::Publisher iteration_num_pub_;
     ros::Publisher diagnostics_pub_;
+    ros::Publisher fps_pub_;
 
     pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_;
 

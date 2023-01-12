@@ -21,7 +21,7 @@
   <include file="$(find ndt_localizer)/launch/map_loader.launch">
     <arg name="map_topic" value="$(arg input_map_points_topic)" />
     <arg name="pcd_path" value="$(arg pcd_filepath)" />
-  <include/>
+  </include>
   <include file="$(find ndt_localizer)/launch/points_downsample.launch" />
 
   <!-- tf -->
@@ -55,7 +55,7 @@
 	<node pkg="rosbag" type="play" name="rosbag"
 		args="'$(arg bag_filepath)' --delay '$(arg play_delay)' --rate '$(arg play_rate)' --clock" />
 	
-    <node pkg="ndt_localizer" type="odom_pub" name="odom_pub" output="screen"/>
+  <node pkg="ndt_localizer" type="odom_pub" name="odom_pub" output="screen"/>
 
   <node pkg="ndt_localizer" type="scanOptimal" name="scanOptimal" output="screen">
 	 <remap from="/velodyne_cloud_registered_local" to="/filtered_points"/>
